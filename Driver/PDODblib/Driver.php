@@ -42,7 +42,12 @@ class Driver implements \Doctrine\DBAL\Driver
                 $driverOptions
             );
         }
-        
+        $conn->exec("set quoted_identifier on;
+            set ansi_warnings on;
+            set ansi_padding on;
+            set ansi_nulls on;
+            set concat_null_yields_null on;");
+
         return $conn;
     }
 
@@ -78,7 +83,8 @@ class Driver implements \Doctrine\DBAL\Driver
                 $dsn .= 'host=' . $params['host'] . ';';
             }
             if (isset($params['port'])) {
-                $dsn .= 'port=' . $params['port'] . ';';
+                //$dsn .= 'port=' . $params['port'] . ';';
+                $dsn = rtrim($dsn, ';') . ':' . $params['port'] . ';';
             }
             if (isset($params['dbname'])) {
                 $dsn .= 'dbname=' . $params['dbname'] . ';';
